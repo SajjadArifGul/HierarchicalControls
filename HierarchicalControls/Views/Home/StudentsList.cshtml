@@ -1,0 +1,6 @@
+﻿@using HierarchicalControls.Code
+@using HierarchicalControls.Models
+@model List<HierarchicalControls.Models.Student>
+
+@Html.HierarchicalDropDown("studentsDropDown", "Students Selection", Model.Select(x=> new HierarchicalItem() { ID = x.ID, Name = x.Name, ParentID = x.ParentID }).ToList())
+<script src="~/Scripts/hierarchicalcontrols.js"></script>

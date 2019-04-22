@@ -40,7 +40,7 @@ namespace HierarchicalControls.Code
             return MvcHtmlString.Create(mainDiv.ToString());
         }
 
-        public static MvcHtmlString ListItem(HierarchicalItem listItem)
+        private static MvcHtmlString ListItem(HierarchicalItem listItem)
         {
             var li = new TagBuilder("li");
             li.MergeAttribute("data-id", listItem.ID.ToString());
@@ -48,7 +48,7 @@ namespace HierarchicalControls.Code
             if (listItem.Children != null && listItem.Children.Count > 0)
             {
                 var iconSpan = new TagBuilder("span");
-                iconSpan.AddCssClass("badge badge-secondary hasChilds fas fa-plus-square mr-1");
+                iconSpan.AddCssClass("badge badge-secondary hasChilds hClose fas fa-plus-square mr-1");
                 iconSpan.InnerHtml = " ";
 
                 var childList = new TagBuilder("ul");

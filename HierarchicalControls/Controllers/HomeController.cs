@@ -96,5 +96,46 @@ namespace HierarchicalControls.Controllers
             }
             return finalList;
         }
+
+
+        public ActionResult StudentsList()
+        {
+            List<Student> list = new List<Student>();
+
+            list.Add(new Student() { Name = "Student 1", ID = 1, ParentID = 0 });
+            list.Add(new Student() { Name = "Student 2", ID = 2, ParentID = 1 });
+            list.Add(new Student() { Name = "Student 3", ID = 3, ParentID = 1 });
+            list.Add(new Student() { Name = "Student 4", ID = 4, ParentID = 1 });
+            list.Add(new Student() { Name = "Student 5", ID = 5, ParentID = 1 });
+            list.Add(new Student() { Name = "Student 6", ID = 6, ParentID = 5 });
+            list.Add(new Student() { Name = "Student 7", ID = 7, ParentID = 5 });
+            list.Add(new Student() { Name = "Student 8", ID = 8, ParentID = 5 });
+            list.Add(new Student() { Name = "Student 9", ID = 9, ParentID = 5 });
+            list.Add(new Student() { Name = "Student 10", ID = 10, ParentID = 9 });
+
+            list.Add(new Student() { Name = "Student 11", ID = 11, ParentID = 0 });
+            list.Add(new Student() { Name = "Student 12", ID = 12, ParentID = 11 });
+
+            list.Add(new Student() { Name = "Student 13", ID = 13, ParentID = 0 });
+            list.Add(new Student() { Name = "Student 14", ID = 14, ParentID = 0 });
+
+            list.Add(new Student() { Name = "Student 15", ID = 15, ParentID = 0 });
+            list.Add(new Student() { Name = "Student 16", ID = 16, ParentID = 15 });
+            list.Add(new Student() { Name = "Student 17", ID = 17, ParentID = 15 });
+
+            list.Add(new Student() { Name = "Student 18", ID = 18, ParentID = 0 });
+            list.Add(new Student() { Name = "Student 19", ID = 19, ParentID = 18 });
+            list.Add(new Student() { Name = "Student 20", ID = 20, ParentID = 18 });
+            list.Add(new Student() { Name = "Student 21", ID = 21, ParentID = 18 });
+            list.Add(new Student() { Name = "Student 22", ID = 22, ParentID = 21 });
+            list.Add(new Student() { Name = "Student 23", ID = 23, ParentID = 22 });
+            list.Add(new Student() { Name = "Student 24", ID = 24, ParentID = 23 });
+            list.Add(new Student() { Name = "Student 25", ID = 25, ParentID = 23 });
+
+            list.Add(new Student() { Name = "Student 26", ID = 26, ParentID = 0 });
+
+            return View(list);
+        }
+
     }
 }

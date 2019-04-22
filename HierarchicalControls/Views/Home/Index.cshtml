@@ -1,7 +1,7 @@
 ﻿@using HierarchicalControls.Code
 @using HierarchicalControls.Models
 
-@model List<HierarchicalControls.Models.HierarchicalItem>
+@model List<HierarchicalItem>
 
 @{
     ViewBag.Title = "Home Page";
@@ -12,17 +12,4 @@
 	@Html.HierarchicalDropDown("hierarchicalDropDown", "HierarchicalDropDown", Model)
 }
 
-<script>
-	$(".hierarchicalDropDown li span").click(function (event) {
-		if ($(this).hasClass("hasChilds")) {
-			$(this).toggleClass("fa-plus-square");
-			$(this).toggleClass("fa-minus-square");
-
-			$(this).siblings("ul").toggle();
-		}
-
-		$(this).toggleClass("selected");
-
-		event.stopPropagation();
-	});
-</script>
+<script src="~/Scripts/hierarchicalcontrols.js"></script>
