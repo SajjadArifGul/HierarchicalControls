@@ -1,0 +1,32 @@
+﻿@model List<TreeViewHierarchicalData>
+@using HierarchicalControls.Models
+
+@foreach (var item in Model)
+{
+	bool hasChildren = item.Children.Count > 0;
+	string itemKeyEn = item.TableData.Where(x => x.Key.Contains("NameEn")).Select(x => x.Key).FirstOrDefault();
+	// string itemKeyAr = item.TableData.Where(x => x.Key.Contains("NameAr")).Select(x => x.Key).FirstOrDefault();
+	string itemKeyID = item.TableData.Where(x => x.Key.Contains("ID") && !x.Key.Contains("Parent")).Select(x => x.Key).FirstOrDefault();
+	string itemName = item.TableData[itemKeyEn].ToString().Trim();
+	<li class="close" id="@(itemKeyID)SecSel_@item.TableData[itemKeyID]">
+		<span class="root">
+			@if (hasChildren)
+			{
+				<a class="tree-icon" onclick="return nodeClick@(itemKeyID)Click(@item.TableData[itemKeyID])"><i class="icon"></i></a>
+			}
+			else
+			{
+				<i class="no-child"></i>
+			}
+			<a item-key="@itemKeyID" item-id="@item.TableData[itemKeyID]" item-name="@itemName" class="sas" onclick="return select@(itemKeyID)(@item.TableData[itemKeyID],'@itemName')">@itemName </a>
+		</span>
+		@if (hasChildren)
+		{
+			<ul class="n-display">
+				@{
+                    Html.RenderPartial("_SelectedTreeView", item.Children);
+				}
+			</ul>
+		}
+	</li>
+}

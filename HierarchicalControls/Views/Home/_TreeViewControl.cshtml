@@ -1,0 +1,24 @@
+﻿@model HierarchicalControls.Models.TreeViewModel
+<div class="ih">
+	@*<label>@Model.Title</label>*@
+	<div id="arsec" class="tree-view cep m-bottom pull-left" style="z-index:unset">
+		<div><span>Select @Model.Title</span><i class="icon"></i></div>
+		<ul id="@string.Format("{0}UlRoot", Model.TableName)">
+			@{
+				Html.RenderPartial("_SelectedTreeView", Model.TableHierarchicalData);
+			}
+		</ul>
+	</div>
+	<div id="@string.Format("div{0}", Model.TableName)" class="ih assign-role overflow-fix clear">
+	</div>
+</div>
+<input type="hidden" id="@string.Format("{0}MultiSelect", Model.TableName)" value="@Model.MultiSelect.ToString().ToLower()" />
+<script>
+    @{
+        string script = @"var tableName = [];
+function drawtableName() { var multiSelect = $('#tableNameMultiSelect').val(); $('#divtableName').html(''); $(tableName).each(function(index, value) { var span = $('<span>'); span.addClass('remove btnpad'); span.attr('primaryKey', value.ID); var ahref = $('<a>'); ahref.html(value.Name); var icon = $('<i>'); icon.addClass('icon'); ahref.append(icon); span.append(ahref); span.click(function() { var id = $(this).attr('primaryKey'); tableName = $.grep(tableName, function(n) { return n.ID != id; }); drawtableName(); });if ($('#divtableName').children().length == 0 || multiSelect == 'true') { $('#divtableName').append(span); } else {alert('You can select only one TITLE at a time.'); tableName = []; } }); }; function nodeClickprimaryKeyClick(primaryKey) { var liNode = $('#primaryKeySecSel_' + primaryKey); var childUlNode = liNode.children('ul').eq(0); if (liNode.attr('class') == 'close') { liNode.attr('class', 'open'); childUlNode.attr('class', 'y-display'); } else { liNode.attr('class', 'close'); childUlNode.attr('class', 'n-display'); } return false; } function selectprimaryKey(primaryKey, NameAr) { var tableNameSec = { 'ID': primaryKey, 'Name': NameAr };; tableName = $.grep(tableName, function(n) { return n.ID != primaryKey; }); tableName.push(tableNameSec); drawtableName(); return false; };";
+        script = script.Replace("tableName", Model.TableName).Replace("primaryKey", Model.PrimaryKey).Replace("TITLE", Model.Title);
+    }
+    @Html.Raw(script);
+</script>
+
