@@ -25,4 +25,18 @@ namespace HierarchicalControls.Models
         public Dictionary<string, object> TableData { get; set; }
         public List<TreeViewHierarchicalData> Children { get; set; }
     }
+
+    public class HierarchicalItem
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int ParentID { get; set; }
+
+        public List<HierarchicalItem> Children { get; set; }
+
+        public HierarchicalItem()
+        {
+            this.Children = new List<HierarchicalItem>();            
+        }
+    }
 }

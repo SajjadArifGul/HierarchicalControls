@@ -12,7 +12,41 @@ namespace HierarchicalControls.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            List<HierarchicalItem> list = new List<HierarchicalItem>();
+
+            list.Add(new HierarchicalItem() { Name = "Item 1", ID = 1, ParentID = 0 });
+            list.Add(new HierarchicalItem() { Name = "Item 2", ID = 2, ParentID = 1 });
+            list.Add(new HierarchicalItem() { Name = "Item 3", ID = 3, ParentID = 1 });
+            list.Add(new HierarchicalItem() { Name = "Item 4", ID = 4, ParentID = 1 });
+            list.Add(new HierarchicalItem() { Name = "Item 5", ID = 5, ParentID = 1 });
+            list.Add(new HierarchicalItem() { Name = "Item 6", ID = 6, ParentID = 5 });
+            list.Add(new HierarchicalItem() { Name = "Item 7", ID = 7, ParentID = 5 });
+            list.Add(new HierarchicalItem() { Name = "Item 8", ID = 8, ParentID = 5 });
+            list.Add(new HierarchicalItem() { Name = "Item 9", ID = 9, ParentID = 5 });
+            list.Add(new HierarchicalItem() { Name = "Item 10", ID = 10, ParentID = 9 });
+
+            list.Add(new HierarchicalItem() { Name = "Item 11", ID = 11, ParentID = 0 });
+            list.Add(new HierarchicalItem() { Name = "Item 12", ID = 12, ParentID = 11 });
+
+            list.Add(new HierarchicalItem() { Name = "Item 13", ID = 13, ParentID = 0 });
+            list.Add(new HierarchicalItem() { Name = "Item 14", ID = 14, ParentID = 0 });
+
+            list.Add(new HierarchicalItem() { Name = "Item 15", ID = 15, ParentID = 0 });
+            list.Add(new HierarchicalItem() { Name = "Item 16", ID = 16, ParentID = 15 });
+            list.Add(new HierarchicalItem() { Name = "Item 17", ID = 17, ParentID = 15 });
+
+            list.Add(new HierarchicalItem() { Name = "Item 18", ID = 18, ParentID = 0 });
+            list.Add(new HierarchicalItem() { Name = "Item 19", ID = 19, ParentID = 18 });
+            list.Add(new HierarchicalItem() { Name = "Item 20", ID = 20, ParentID = 18 });
+            list.Add(new HierarchicalItem() { Name = "Item 21", ID = 21, ParentID = 18 });
+            list.Add(new HierarchicalItem() { Name = "Item 22", ID = 22, ParentID = 21 });
+            list.Add(new HierarchicalItem() { Name = "Item 23", ID = 23, ParentID = 22 });
+            list.Add(new HierarchicalItem() { Name = "Item 24", ID = 24, ParentID = 23 });
+            list.Add(new HierarchicalItem() { Name = "Item 25", ID = 25, ParentID = 23 });
+
+            list.Add(new HierarchicalItem() { Name = "Item 26", ID = 26, ParentID = 0 });
+
+            return View(list);
         }
         
         public ActionResult TreeViewControl(string tableName, string title, string primaryKey, string parentKey, bool multiSelect = false)

@@ -1,4 +1,9 @@
-﻿@{
+﻿@using HierarchicalControls.Code
+@using HierarchicalControls.Models
+
+@model List<HierarchicalControls.Models.HierarchicalItem>
+
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -29,3 +34,20 @@
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+
+@if (Model != null)
+{
+	@Html.HierarchicalDropDown("hierarchicalDropDown", "HierarchicalDropDown", Model)
+}
+
+<script>
+	$("#hierarchicalDropDown li").click(function (event) {
+		if ($(this).hasClass("hasChilds")) {
+			$(this).children("ul").toggle();
+		}
+
+		$(this).toggleClass("selected");
+
+		event.stopPropagation();
+	});
+</script>
