@@ -12,78 +12,68 @@ namespace HierarchicalControls.Code
     {
         public static MvcHtmlString HierarchicalDropDown(this HtmlHelper helper, string id, string title, List<HierarchicalItem> list)
         {
-            ///////////////////
-
-            if(list != null && list.Count > 0)
+            if (list != null && list.Count > 0)
             {
                 foreach (var item in list)
                 {
-                    item.Children = list.Where(x=>x.ParentID == item.ID).ToList();
+                    item.Children = list.Where(x => x.ParentID == item.ID).ToList();
                 }
             }
-
-            ///////////////////
+            
             var mainDiv = new TagBuilder("div");
             mainDiv.GenerateId(id);
             mainDiv.MergeAttribute("title", title);
+            mainDiv.AddCssClass("hierarchicalDropDown");
 
             var ul = new TagBuilder("ul");
+            ul.MergeAttribute("style", "list-style: none;");
+            var listHtml = string.Empty;
 
-            var liHtml = string.Empty;
-
-            foreach (var listItem in list.Where(item=>item.ParentID == 0))
+            foreach (var listItem in list.Where(item => item.ParentID == 0))
             {
-                var li = new TagBuilder("li");
-                li.GenerateId(string.Format("li_{0}", listItem.ID));
-                
-                var liChildHtml = string.Empty; 
-
-                if(listItem.Children.Count > 0)
-                {
-                    li.AddCssClass("hasChilds");
-                    liChildHtml = List(listItem.Children).ToString();
-                }
-
-                li.InnerHtml = listItem.Name + liChildHtml;
-
-                liHtml += li;
+                listHtml += ListItem(listItem);
             }
 
-            ul.InnerHtml = liHtml;
-
+            ul.InnerHtml = listHtml;
             mainDiv.InnerHtml = ul.ToString();
 
             return MvcHtmlString.Create(mainDiv.ToString());
         }
 
-        public static MvcHtmlString List(List<HierarchicalItem> list)
+        public static MvcHtmlString ListItem(HierarchicalItem listItem)
         {
-            var ul = new TagBuilder("ul");
-            ul.MergeAttribute("style", "display:none");
-
-            var liHtml = string.Empty;
-
-            foreach (var listItem in list)
+            var li = new TagBuilder("li");
+            li.MergeAttribute("data-id", listItem.ID.ToString());
+            
+            if (listItem.Children != null && listItem.Children.Count > 0)
             {
-                var li = new TagBuilder("li");
-                li.GenerateId(string.Format("li_{0}", listItem.ID));
+                var iconSpan = new TagBuilder("span");
+                iconSpan.AddCssClass("badge badge-secondary hasChilds fas fa-plus-square mr-1");
+                iconSpan.InnerHtml = " ";
 
-                var liChildHtml = string.Empty;
+                var childList = new TagBuilder("ul");
+                childList.MergeAttribute("style", "list-style: none; display: none;");
 
-                if (listItem.Children.Count > 0)
+                var childListHtml = string.Empty;
+                foreach (var item in listItem.Children)
                 {
-                    li.AddCssClass("hasChilds");
-                    liChildHtml = List(listItem.Children).ToString();
+                    childListHtml += ListItem(item).ToString();
                 }
 
-                li.InnerHtml = listItem.Name + liChildHtml;
+                childList.InnerHtml = childListHtml;
 
-                liHtml += li;
+                li.InnerHtml = iconSpan + listItem.Name + childList;
             }
+            else
+            {
+                var iconSpan = new TagBuilder("span");
+                iconSpan.AddCssClass("fas fa-minus mr-1");
+                iconSpan.InnerHtml = " ";
 
-            ul.InnerHtml = liHtml;
-
-            return MvcHtmlString.Create(ul.ToString());
+                li.InnerHtml = iconSpan + listItem.Name;
+            }
+            
+            return MvcHtmlString.Create(li.ToString());
         }
     }
 }
