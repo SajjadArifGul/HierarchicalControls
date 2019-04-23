@@ -1,5 +1,6 @@
 ﻿using HierarchicalControls.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -75,5 +76,86 @@ namespace HierarchicalControls.Code
             
             return MvcHtmlString.Create(li.ToString());
         }
+
+        public static MvcHtmlString HierarchicalDropDownObject(this HtmlHelper helper, string id, string title, object obj)
+        {
+            var mainDiv = new TagBuilder("div");
+            mainDiv.GenerateId(id);
+            mainDiv.MergeAttribute("title", title);
+            mainDiv.AddCssClass("hierarchicalDropDown");
+
+            try
+            {
+                if (obj.GetType().IsGenericType)
+                {
+                    var dictList = ((IEnumerable<object>)obj).ToDictionaryList();
+
+                    if (dictList != null && dictList.Count > 0)
+                    {
+                        foreach (var dict in dictList)
+                        {
+                            dict["Children"] = dictList.Where(x => x["ParentID"].Equals(dict["ID"])).ToList();
+                        }
+
+                        var ul = new TagBuilder("ul");
+                        ul.MergeAttribute("style", "list-style: none;");
+                        var listHtml = string.Empty;
+
+                        foreach (var listItem in dictList.Where(item => item["ParentID"] == null || item["ParentID"].Equals(0)))
+                        {
+                            listHtml += ListItemObject(listItem);
+                        }
+
+                        ul.InnerHtml = listHtml;
+                        mainDiv.InnerHtml = ul.ToString();
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mainDiv.InnerHtml = ex.Message.ToString();
+            }
+
+            return MvcHtmlString.Create(mainDiv.ToString());
+        }
+
+        private static MvcHtmlString ListItemObject(IDictionary<string, object> listItem)
+        {
+            var li = new TagBuilder("li");
+            li.MergeAttribute("data-id", listItem["ID"].ToString());
+
+            var children = (IList)listItem["Children"];
+
+            if (children != null && children.Count > 0)
+            {
+                var iconSpan = new TagBuilder("span");
+                iconSpan.AddCssClass("badge badge-secondary hasChilds hClose fas fa-plus-square mr-1");
+                iconSpan.InnerHtml = " ";
+
+                var childList = new TagBuilder("ul");
+                childList.MergeAttribute("style", "list-style: none; display: none;");
+
+                var childListHtml = string.Empty;
+                foreach (var item in children)
+                {
+                    childListHtml += ListItemObject((IDictionary<string, object>)item).ToString();
+                }
+
+                childList.InnerHtml = childListHtml;
+
+                li.InnerHtml = iconSpan + listItem["Name"].ToString() + childList;
+            }
+            else
+            {
+                var iconSpan = new TagBuilder("span");
+                iconSpan.AddCssClass("fas fa-minus mr-1");
+                iconSpan.InnerHtml = " ";
+
+                li.InnerHtml = iconSpan + listItem["Name"].ToString();
+            }
+
+            return MvcHtmlString.Create(li.ToString());
+        }        
     }
 }

@@ -148,6 +148,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Code\DictionaryHelper.cs" />
     <Compile Include="Code\Extensions.cs" />
     <Compile Include="Code\HTMLHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -198,6 +199,7 @@
     <Content Include="Views\Home\_TreeViewControl.cshtml" />
     <Content Include="Views\Home\_SelectedTreeView.cshtml" />
     <Content Include="Views\Home\StudentsList.cshtml" />
+    <Content Include="Views\Home\Persons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

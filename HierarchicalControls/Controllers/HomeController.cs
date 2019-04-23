@@ -133,9 +133,48 @@ namespace HierarchicalControls.Controllers
             list.Add(new Student() { Name = "Student 25", ID = 25, ParentID = 23 });
 
             list.Add(new Student() { Name = "Student 26", ID = 26, ParentID = 0 });
-
+            
             return View(list);
         }
 
+
+        public ActionResult Persons()
+        {
+            List<Person> list = new List<Person>();
+
+            list.Add(new Person() { Name = "Person 1", ID = 1, ParentID = 0 });
+            list.Add(new Person() { Name = "Person 2", ID = 2, ParentID = 1 });
+            list.Add(new Person() { Name = "Person 3", ID = 3, ParentID = 1 });
+            list.Add(new Person() { Name = "Person 4", ID = 4, ParentID = 1 });
+            list.Add(new Person() { Name = "Person 5", ID = 5, ParentID = 1 });
+            list.Add(new Person() { Name = "Person 6", ID = 6, ParentID = 5 });
+            list.Add(new Person() { Name = "Person 7", ID = 7, ParentID = 5 });
+            list.Add(new Person() { Name = "Person 8", ID = 8, ParentID = 5 });
+            list.Add(new Person() { Name = "Person 9", ID = 9, ParentID = 5 });
+            list.Add(new Person() { Name = "Person 10", ID = 10, ParentID = 9 });
+
+            list.Add(new Person() { Name = "Person 11", ID = 11, ParentID = 0 });
+            list.Add(new Person() { Name = "Person 12", ID = 12, ParentID = 11 });
+
+            list.Add(new Person() { Name = "Person 13", ID = 13, ParentID = 0 });
+            list.Add(new Person() { Name = "Person 14", ID = 14, ParentID = 0 });
+
+            list.Add(new Person() { Name = "Person 15", ID = 15, ParentID = 0 });
+            list.Add(new Person() { Name = "Person 16", ID = 16, ParentID = 15 });
+            list.Add(new Person() { Name = "Person 17", ID = 17, ParentID = 15 });
+
+            list.Add(new Person() { Name = "Person 18", ID = 18, ParentID = 0 });
+            list.Add(new Person() { Name = "Person 19", ID = 19, ParentID = 18 });
+            list.Add(new Person() { Name = "Person 20", ID = 20, ParentID = 18 });
+            list.Add(new Person() { Name = "Person 21", ID = 21, ParentID = 18 });
+            list.Add(new Person() { Name = "Person 22", ID = 22, ParentID = 21 });
+            list.Add(new Person() { Name = "Person 23", ID = 23, ParentID = 22 });
+            list.Add(new Person() { Name = "Person 24", ID = 24, ParentID = 23 });
+            list.Add(new Person() { Name = "Person 25", ID = 25, ParentID = 23 });
+
+            list.Add(new Person() { Name = "Person 26", ID = 26, ParentID = 0 });
+
+            return View(list);
+        }
     }
 }

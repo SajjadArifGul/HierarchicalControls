@@ -1,0 +1,7 @@
+﻿@using HierarchicalControls.Code
+@using HierarchicalControls.Models
+@model List<HierarchicalControls.Models.Person>
+
+@Html.HierarchicalDropDownObject("personsDropDown", "Persons Selection", Model)
+
+<script src="~/Scripts/hierarchicalcontrols.js"></script>
