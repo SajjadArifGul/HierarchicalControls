@@ -9,7 +9,30 @@
 
 @if (Model != null)
 {
-	@Html.HierarchicalDropDown("hierarchicalDropDown", "HierarchicalDropDown", Model)
+    @Html.HierarchicalDropDown(Model)
+    <hr />
+    @Html.HierarchicalTreeView(Model)
+    <hr />
+    @Html.HierarchicalAccordions(Model)
 }
 
 <script src="~/Scripts/hierarchicalcontrols.js"></script>
+
+Bootstrap Tree Menu Example
+https://codepen.io/kaslab/pen/rewvEo
+
+Bootstrap Tree examples
+https://jsfiddle.net/jhfrench/GpdgF/
+
+Bootstrap Treeview links
+https://bootsnipp.com/snippets/ypNAe
+
+Bootstrap TreeView countries
+https://gijgo.com/tree/demos/bootstrap-treeview
+
+Bootstrap TreeView with Checkboxes
+https://gijgo.com/tree/demos/bootstrap-treeview-checkbox
+
+kendo folder treeview
+https://demos.telerik.com/kendo-ui/treeview/checkboxes
+
