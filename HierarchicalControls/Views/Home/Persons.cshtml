@@ -5,3 +5,48 @@
 @Html.HierarchicalDropDownObject("personsDropDown", "Persons Selection", Model)
 
 <script src="~/Scripts/hierarchicalcontrols.js"></script>
+
+<section class="holder">
+	<div class="title-holder">
+		<h3>Sectors</h3>
+		<div class="info"><i class="fas fa-info-circle"></i>By Argaam</div>
+		<div class="reset resetHierarchicalDropDownFilters">Reset</div>
+	</div>
+	<div class="content">
+		<div class="search-box border--solid border--1px border--gray dropdown">
+			<input type="text" name="" placeholder="search">
+			<i class="fal fa-search"></i>
+			<i class="displayList far fa-angle-down"></i>
+			<div class="dropdown-options" style="display:none;">
+				@Html.HierarchicalDropDown(Model.Sectors, string.Format("ArgaamSectorName{0}", SharedPageData.CurrentLanguage.LanguageShortName.UpperCaseFirstLetter()), "ArgaamSectorID", "ParentArgaamSectorID", "sectorsDropDown", "Sectors Selection")
+			</div>
+		</div>
+		<div class="applied-filters">
+		</div>
+		<input type="hidden" class="searchElement" name="Sectors" value="" />
+	</div>
+</section>
+
+<section class="holder closable closed">
+	<div class="title-holder">
+		<span class="vexpender">
+			<i class="far fa-angle-up"></i> <i class="far fa-angle-down"></i>
+		</span>
+		<h3>Project Categories</h3>
+		<div class="reset resetHierarchicalDropDownFilters">Reset</div>
+	</div>
+	<div class="content">
+		<div class="category-tree">
+			@Html.HierarchicalTreeView(Model.ProjectCategories, string.Format("Name{0}", SharedPageData.CurrentLanguage.LanguageShortName.UpperCaseFirstLetter()), "ProjectCategoryID", "ParentProjectCategoryID", "category-tree")
+		</div>
+	</div>
+
+	<input type="hidden" class="searchElement" name="ProjectCategories" value="" />
+</section>
+
+<section class="categories">
+	<div class="section-title"><h3>Categories</h3><i class="far fa-chevron-up"></i></div>
+
+	@Html.HierarchicalAccordions(Model.Categories, string.Format("Name{0}", SharedPageData.CurrentLanguage.LanguageShortName.UpperCaseFirstLetter()), "ProjectCategoryID", "ParentProjectCategoryID", "category-tree", selectedItemID: Model.SaudiProjectDetail.ProjectCategoryID.HasValue ? Model.SaudiProjectDetail.ProjectCategoryID.Value.ToString() : "")
+
+</section>

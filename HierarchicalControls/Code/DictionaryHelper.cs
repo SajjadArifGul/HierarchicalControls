@@ -16,7 +16,7 @@ namespace HierarchicalControls.Code
         public static List<IDictionary<string, object>> ToDictionaryList(this IEnumerable<object> sourceList)
         {
             var dicList = new List<IDictionary<string, object>>();
-            
+
             foreach (var item in sourceList)
             {
                 dicList.Add(item.ToDictionary<object>());
