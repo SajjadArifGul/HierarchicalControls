@@ -9,14 +9,52 @@ using System.Web.Routing;
 
 namespace HierarchicalControls.Code
 {
-    public static class HTMLHelper
+    public static class HierarchicalHelper
     {
-        public static MvcHtmlString HierarchicalDropDown(this HtmlHelper helper, object obj, string displayProperty = "Name", string idProperty = "ID", string parentIDProperty = "ParentID", string id = "", string title = "", bool manualFunction = false)
+        public static MvcHtmlString HierarchicalDropDown(this HtmlHelper helper,
+            object obj,
+            HierarchicalDropDownObject hierarchicalDropDownObject = null,
+            string displayProperty = "Name",
+            string idProperty = "ID",
+            string parentIDProperty = "ParentID",
+            string elementID = "",
+            string elementClasses = "",
+            string elementHTMLTitle = "",
+            string elementListClasses = "",
+            string elementListItemClasses = "",
+            string selectedElementID = "",
+            string selectedElementClasses = "",
+            bool applyJQuery = false)
+        {
+            if (hierarchicalDropDownObject == null)
+            {
+                hierarchicalDropDownObject = new HierarchicalDropDownObject();
+
+                hierarchicalDropDownObject.DisplayProperty = displayProperty;
+                hierarchicalDropDownObject.IDProperty = idProperty;
+                hierarchicalDropDownObject.ParentIDProperty = parentIDProperty;
+
+                hierarchicalDropDownObject.ElementID = elementID;
+                hierarchicalDropDownObject.ElementClasses = elementClasses;
+                hierarchicalDropDownObject.ElementHTMLTitle = elementHTMLTitle;
+                hierarchicalDropDownObject.ElementListClasses = elementListClasses;
+                hierarchicalDropDownObject.ElementListItemClasses = elementListItemClasses;
+                
+                hierarchicalDropDownObject.SelectedElementClasses = selectedElementID;
+                hierarchicalDropDownObject.SelectedElementClasses = selectedElementClasses;
+
+                hierarchicalDropDownObject.ApplyJQuery = applyJQuery;
+            }
+
+            return HierarchicalDropDown(helper, obj, hierarchicalDropDownObject);
+        }
+
+        private static MvcHtmlString HierarchicalDropDown(this HtmlHelper helper, object obj, HierarchicalDropDownObject hierarchicalDropDownObject)
         {
             var mainDiv = new TagBuilder("div");
-            mainDiv.GenerateId(id);
-            mainDiv.MergeAttribute("title", title);
-            mainDiv.AddCssClass("hierarchicalDropDown");
+            mainDiv.GenerateId(hierarchicalDropDownObject.ElementID);
+            mainDiv.MergeAttribute("title", hierarchicalDropDownObject.ElementHTMLTitle);
+            mainDiv.AddCssClass(string.Format("hierarchicalDropDown {0}", hierarchicalDropDownObject.ElementClasses));
 
             try
             {
@@ -28,16 +66,16 @@ namespace HierarchicalControls.Code
                     {
                         foreach (var dict in dictList)
                         {
-                            dict["Children"] = dictList.Where(x => x.ContainsKey(parentIDProperty) && x[parentIDProperty].Equals(dict[idProperty])).ToList();
+                            dict["Children"] = dictList.Where(x => x.ContainsKey(hierarchicalDropDownObject.ParentIDProperty) && x[hierarchicalDropDownObject.ParentIDProperty].Equals(dict[hierarchicalDropDownObject.IDProperty])).ToList();
                         }
 
                         var ul = new TagBuilder("ul");
                         ul.MergeAttribute("style", "list-style: none;");
                         var listHtml = string.Empty;
 
-                        foreach (var listItem in dictList.Where(item => !item.ContainsKey(parentIDProperty) || item[parentIDProperty].Equals("") || item[parentIDProperty].Equals(0)))
+                        foreach (var listItem in dictList.Where(item => !item.ContainsKey(hierarchicalDropDownObject.ParentIDProperty) || item[hierarchicalDropDownObject.ParentIDProperty].Equals("") || item[hierarchicalDropDownObject.ParentIDProperty].Equals(0)))
                         {
-                            listHtml += ListItem(listItem, displayProperty, idProperty, manualFunction);
+                            listHtml += ListItem(listItem, hierarchicalDropDownObject);
                         }
 
                         ul.InnerHtml = listHtml;
@@ -54,14 +92,14 @@ namespace HierarchicalControls.Code
             return MvcHtmlString.Create(mainDiv.ToString());
         }
 
-        private static MvcHtmlString ListItem(IDictionary<string, object> listItem, string displayProperty, string idProperty, bool manualFunction)
+        private static MvcHtmlString ListItem(IDictionary<string, object> listItem, HierarchicalDropDownObject hierarchicalDropDownObject)
         {
             var li = new TagBuilder("li");
-            li.AddCssClass("hOption");
-            li.MergeAttribute("data-id", listItem[idProperty].ToString());
-            li.MergeAttribute("data-text", listItem[displayProperty].ToString());
+            li.AddCssClass(string.Format("{0}", hierarchicalDropDownObject.ElementListItemClasses).Trim());
+            li.MergeAttribute("data-id", listItem[hierarchicalDropDownObject.IDProperty].ToString());
+            li.MergeAttribute("data-text", listItem[hierarchicalDropDownObject.DisplayProperty].ToString());
 
-            if (manualFunction)
+            if (hierarchicalDropDownObject.ApplyJQuery)
             {
                 li.AddCssClass("manual");
             }
@@ -71,12 +109,13 @@ namespace HierarchicalControls.Code
             if (children != null && children.Count > 0)
             {
                 var iconSpan = new TagBuilder("span");
-                iconSpan.AddCssClass("hasChilds hClose fas fa-plus-square mr-1");
+                iconSpan.AddCssClass("");
+                li.AddCssClass(string.Format("hasChilds hClose {0}", hierarchicalDropDownObject.ElementListItemClasses).Trim());
                 iconSpan.InnerHtml = " ";
 
                 var liDiv = new TagBuilder("div");
                 liDiv.AddCssClass("item-holder");
-                liDiv.InnerHtml = iconSpan + listItem[displayProperty].ToString();
+                liDiv.InnerHtml = iconSpan + listItem[hierarchicalDropDownObject.DisplayProperty].ToString();
 
                 var childList = new TagBuilder("ul");
                 childList.MergeAttribute("style", "list-style: none; display: none;");
@@ -84,7 +123,7 @@ namespace HierarchicalControls.Code
                 var childListHtml = string.Empty;
                 foreach (var item in children)
                 {
-                    childListHtml += ListItem((IDictionary<string, object>)item, displayProperty, idProperty, manualFunction).ToString();
+                    childListHtml += ListItem((IDictionary<string, object>)item, hierarchicalDropDownObject).ToString();
                 }
 
                 childList.InnerHtml = childListHtml;
@@ -95,7 +134,7 @@ namespace HierarchicalControls.Code
             {
                 var liDiv = new TagBuilder("div");
                 liDiv.AddCssClass("item-holder");
-                liDiv.InnerHtml = listItem[displayProperty].ToString();
+                liDiv.InnerHtml = listItem[hierarchicalDropDownObject.DisplayProperty].ToString();
 
                 li.InnerHtml = string.Format("{0}", liDiv);
             }
@@ -256,7 +295,7 @@ namespace HierarchicalControls.Code
 
             return MvcHtmlString.Create(mainDiv.ToString());
         }
-
+        
         private static MvcHtmlString AccordionListItem(IDictionary<string, object> listItem, string displayProperty, string idProperty, string selectedItemID)
         {
             var ul = new TagBuilder("ul");
@@ -294,5 +333,42 @@ namespace HierarchicalControls.Code
 
             return MvcHtmlString.Create(ul.ToString());
         }
+
+        #region HierarchicalObjects
+        public abstract class HierarchicalObject
+        {
+            public string DisplayProperty { get; set; }
+            public string IDProperty { get; set; }
+            public string ParentIDProperty { get; set; }
+
+            public string ElementID { get; set; }
+            public string ElementClasses { get; set; }
+            public string ElementHTMLTitle { get; set; }
+
+            public string ElementListClasses { get; set; }
+            public string ElementListItemClasses { get; set; }
+
+            public string SelectedElementID { get; set; }
+            public string SelectedElementClasses { get; set; }
+
+            public bool ApplyJQuery { get; set; }
+        }
+
+        public class HierarchicalDropDownObject : HierarchicalObject
+        {
+            public HierarchicalDropDownObject()
+            {
+                this.DisplayProperty = "Name";
+                this.IDProperty = "ID";
+                this.ParentIDProperty = "ParentID";
+
+                this.ElementID = Guid.NewGuid().ToString().Replace("-", "");
+                this.ElementClasses = "";
+                this.ElementHTMLTitle = "";
+                this.ElementListClasses = "";
+                this.ElementListItemClasses = "";
+            }
+        }
+        #endregion
     }
 }
