@@ -53,8 +53,8 @@ namespace HierarchicalControls.Code
         {
             var mainDiv = new TagBuilder("div");
             mainDiv.GenerateId(hierarchicalDropDownObject.ElementID);
-            mainDiv.MergeAttribute("title", hierarchicalDropDownObject.ElementHTMLTitle);
             mainDiv.AddCssClass(string.Format("hierarchicalDropDown {0}", hierarchicalDropDownObject.ElementClasses));
+            mainDiv.MergeAttribute("title", hierarchicalDropDownObject.ElementHTMLTitle);
 
             try
             {
@@ -70,6 +70,7 @@ namespace HierarchicalControls.Code
                         }
 
                         var ul = new TagBuilder("ul");
+                        ul.AddCssClass("main");
                         ul.MergeAttribute("style", "list-style: none;");
                         var listHtml = string.Empty;
 
@@ -103,22 +104,26 @@ namespace HierarchicalControls.Code
             {
                 li.AddCssClass("manual");
             }
+            
+            var textDiv = new TagBuilder("div");
+            textDiv.AddCssClass("item-holder");
+
+            var iconi = new TagBuilder("i");
+            iconi.InnerHtml = " ";
 
             var children = (IList)listItem["Children"];
 
             if (children != null && children.Count > 0)
             {
+                li.AddCssClass("hasChildren");
+
                 var iconSpan = new TagBuilder("span");
-                iconSpan.AddCssClass("");
-                li.AddCssClass(string.Format("hasChilds hClose {0}", hierarchicalDropDownObject.ElementListItemClasses).Trim());
                 iconSpan.InnerHtml = " ";
 
-                var liDiv = new TagBuilder("div");
-                liDiv.AddCssClass("item-holder");
-                liDiv.InnerHtml = iconSpan + listItem[hierarchicalDropDownObject.DisplayProperty].ToString();
+                textDiv.InnerHtml = iconi.ToString() + iconSpan.ToString() + listItem[hierarchicalDropDownObject.DisplayProperty].ToString();
 
                 var childList = new TagBuilder("ul");
-                childList.MergeAttribute("style", "list-style: none; display: none;");
+                childList.MergeAttribute("style", "list-style: none;");
 
                 var childListHtml = string.Empty;
                 foreach (var item in children)
@@ -128,15 +133,13 @@ namespace HierarchicalControls.Code
 
                 childList.InnerHtml = childListHtml;
 
-                li.InnerHtml = string.Format("{0}{1}", liDiv, childList);
+                li.InnerHtml = string.Format("{0}{1}", textDiv, childList);
             }
             else
             {
-                var liDiv = new TagBuilder("div");
-                liDiv.AddCssClass("item-holder");
-                liDiv.InnerHtml = listItem[hierarchicalDropDownObject.DisplayProperty].ToString();
+                textDiv.InnerHtml = iconi.ToString() + listItem[hierarchicalDropDownObject.DisplayProperty].ToString();
 
-                li.InnerHtml = string.Format("{0}", liDiv);
+                li.InnerHtml = string.Format("{0}", textDiv);
             }
 
             return MvcHtmlString.Create(li.ToString());
